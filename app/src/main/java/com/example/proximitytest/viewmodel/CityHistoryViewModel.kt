@@ -5,20 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.proximitytest.database.citydata.City
 import com.example.proximitytest.database.RoomSingleton
+import com.example.proximitytest.database.citydata.CityHistory
+import com.example.proximitytest.repository.CityHistoryRepository
 import com.example.proximitytest.repository.CityRepository
 
-class CityViewModel(application: Application) : ViewModel() {
+class CityHistoryViewModel(application: Application) : ViewModel() {
 
-    private val cityRepository: CityRepository
-    private val allCityData: LiveData<List<City>>
+    private val cityRepository: CityHistoryRepository
+    lateinit var cityHistory: LiveData<List<CityHistory>>
 
     init {
-        cityRepository = CityRepository(RoomSingleton.getInstance(application).getCityDao())
-        allCityData = cityRepository.getCityData()
+        cityRepository = CityHistoryRepository(RoomSingleton.getInstance(application).getCityHistoryDao())
     }
 
-    fun getAllcityData(): LiveData<List<City>> {
-        return allCityData
+    fun getAllcityData(name: String): LiveData<List<CityHistory>> {
+        cityHistory = cityRepository.getCityHistoryData(name)
+        return cityHistory;
     }
 
 }
